@@ -1,0 +1,22 @@
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.geometry.Insets?>
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml" fx:controller="StudyController">
+    <padding>
+        <Insets top="10" right="15" bottom="10" left="15"/>
+    </padding>
+
+    <Label fx:id="questionLabel" wrapText="true"/>
+
+    <Button text="Show Hint" onAction="#showHint"/>
+    <Label fx:id="hintLabel"/>
+
+    <Button text="Show Solution" onAction="#showSolution"/>
+    <TextArea fx:id="solutionArea" editable="false"/>
+
+    <Button text="Next Question" onAction="#nextQuestion"/>
+
+    <Button text="Editor Mode" onAction="#switchToEditor"/>
+</VBox>

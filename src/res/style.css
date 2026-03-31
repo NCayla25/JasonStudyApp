@@ -1,0 +1,56 @@
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: #f0f2f5;
+}
+
+.label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+.text-field, .text-area, .combo-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d0d0d0;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-focus-color: #4a90e2;
+    -fx-faint-focus-color: #4a90e222;
+}
+
+.button {
+    -fx-background-color: #4a90e2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+    -fx-padding: 8 15 8 15;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #357ABD;
+}
+
+.list-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d0d0d0;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #4a90e2;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #4a90e2;
+    -fx-background-radius: 5px;
+}
+
+.text-area {
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 13px;
+    -fx-background-color: #fafafa;
+}
