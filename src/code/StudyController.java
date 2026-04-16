@@ -15,12 +15,18 @@ public class StudyController
 
     private List<Question> questions;
     private Question currentQuestion;
+    public ComboBox<String> courseFilterDropdown;
     private int hintIndex;
 
     private final String FILE = System.getProperty("user.dir") + "/questions.json";
 
     public void initialize()
     {
+        courseFilterDropdown.getItems().addAll("All", "Java", "Computer Architecture");
+        courseFilterDropdown.setValue("All");
+
+        courseFilterDropdown.setOnAction(e -> loadNewQuestion());
+
         questions = QuestionLoader.load(FILE);
         loadNewQuestion();
     }
@@ -33,8 +39,28 @@ public class StudyController
             return;
         }
 
-        Random rand = new Random();
-        currentQuestion = questions.get(rand.nextInt(questions.size()));
+        final String selectedCourse;
+        List<Question> filtered;
+        final Random rand;
+
+        selectedCourse = courseFilterDropdown.getValue();
+        filtered = questions;
+        rand = new Random();
+
+        if (!selectedCourse.equals("All"))
+        {
+            filtered = questions.stream()
+                    .filter(q -> q.getCourse().equals(selectedCourse))
+                    .toList();
+        }
+
+        if (filtered.isEmpty())
+        {
+            questionLabel.setText("No questions for this course.");
+            return;
+        }
+
+        currentQuestion = filtered.get(rand.nextInt(filtered.size()));
 
         questionLabel.setText(currentQuestion.getQuestionText());
         hintLabel.setText("");
@@ -72,12 +98,16 @@ public class StudyController
     public void switchToEditor()
         throws Exception
     {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/editor.fxml"));
-        Scene scene = new Scene(loader.load());
+        final FXMLLoader loader;
+        final Scene scene;
+        final Stage stage;
+
+        loader = new FXMLLoader(getClass().getResource("/editor.fxml"));
+        scene = new Scene(loader.load());
+        stage = (Stage) questionLabel.getScene().getWindow();
 
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
-        Stage stage = (Stage) questionLabel.getScene().getWindow();
         stage.setScene(scene);
     }
 }

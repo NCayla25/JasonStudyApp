@@ -8,11 +8,11 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EditorController
 {
     public ComboBox<String> courseDropdown;
-    public ComboBox<String> difficultyDropdown;
     public TextField topicField;
     public TextArea questionArea;
     public TextArea solutionArea;
@@ -22,9 +22,12 @@ public class EditorController
     public Button addHintButton;
     public Button removeHintButton;
     public Button saveButton;
+    public Button deleteButton;
+    public ComboBox<Question> questionListView;
 
     private ObservableList<String> hintList;
     private List<Question> questions;
+    private int selectedIndex = -1;
 
     private final String FILE = System.getProperty("user.dir") + "/questions.json";
 
@@ -35,7 +38,6 @@ public class EditorController
 
         // Setup dropdowns
         courseDropdown.getItems().addAll("Java", "Computer Architecture");
-        difficultyDropdown.getItems().addAll("Easy", "Medium", "Hard");
 
         // Bind hints list
         hintList = FXCollections.observableArrayList();
@@ -47,24 +49,103 @@ public class EditorController
         addHintButton.setOnAction(e -> addHint());
 
         removeHintButton.setOnAction(e -> removeHint());
+
+        questionListView.setItems(FXCollections.observableArrayList(questions));
+        questionListView.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Question q, boolean empty)
+            {
+                super.updateItem(q, empty);
+                if (empty || q == null)
+                {
+                    setText(null);
+                }
+                else
+                {
+                    setText(q.getCourse() + " - " + q.getTopic());
+                }
+            }
+        });
+
+        questionListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldIndex, newIndex) -> {
+            if (newIndex != null && newIndex.intValue() >= 0)
+            {
+                selectedIndex = newIndex.intValue();
+                Question q = questions.get(selectedIndex);
+
+                courseDropdown.setValue(q.getCourse());
+                topicField.setText(q.getTopic());
+                questionArea.setText(q.getQuestionText());
+                solutionArea.setText(q.getSolution());
+
+                hintList.setAll(q.getHints());
+            }
+        });
+
+        deleteButton.setDisable(true);
+
+        questionListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
+            deleteButton.setDisable(newVal.intValue() < 0);
+        });
     }
 
     private void saveQuestion()
     {
-        Question q = new Question();
+        Question q;
+        q = new Question();
 
         q.setCourse(courseDropdown.getValue());
         q.setTopic(topicField.getText());
-        q.setDifficulty(difficultyDropdown.getValue());
         q.setQuestionText(questionArea.getText());
         q.setHints(new ArrayList<>(hintList));
         q.setSolution(solutionArea.getText());
 
-        questions.add(q);
+        if (selectedIndex >= 0)
+        {
+            questions.set(selectedIndex, q);
+        }
+        else
+        {
+            questions.add(q);
+        }
 
         QuestionSaver.save(questions, FILE);
 
         clearFields();
+
+        selectedIndex = -1;
+        questionListView.getSelectionModel().clearSelection();
+        questionListView.setItems(FXCollections.observableArrayList(questions));
+    }
+
+    public void deleteQuestion()
+    {
+        if (selectedIndex < 0)
+        {
+            return;
+        }
+
+        final Alert alert;
+        final Optional<ButtonType> result;
+
+        alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Question");
+        alert.setHeaderText("Are you sure you want to delete this question?");
+        alert.setContentText("This action cannot be undone.");
+
+        result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK)
+        {
+            questions.remove(selectedIndex);
+
+            QuestionSaver.save(questions, FILE);
+
+            clearFields();
+            selectedIndex = -1;
+
+            questionListView.setItems(FXCollections.observableArrayList(questions));
+        }
     }
 
     private void clearFields()

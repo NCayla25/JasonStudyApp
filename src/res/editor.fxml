@@ -10,8 +10,9 @@
         <Insets top="10" right="15" bottom="10" left="15"/>
     </padding>
 
+    <ComboBox fx:id="questionListView" prefWidth="250"/>
+
     <ComboBox fx:id="courseDropdown" promptText="Course"/>
-    <ComboBox fx:id="difficultyDropdown" promptText="Difficulty"/>
 
     <TextField fx:id="topicField" promptText="Topic"/>
 
@@ -26,6 +27,7 @@
     <TextArea fx:id="solutionArea" promptText="Solution"/>
 
     <Button fx:id="saveButton" text="Save Question"/>
+    <Button fx:id="deleteButton" text="Delete Question" onAction="#deleteQuestion"/>
 
     <Button text="Study Mode" onAction="#switchToStudy"/>
 </VBox>
