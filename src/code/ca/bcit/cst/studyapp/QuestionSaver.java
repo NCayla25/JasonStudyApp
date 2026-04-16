@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Nicholas Cayla
  * @author Samien Munwar
- * @version 1.0
+ * @version 1.2
  */
 public class QuestionSaver
 {
@@ -27,17 +27,12 @@ public class QuestionSaver
     public static void save(final List<Question> questions,
                             final String filename)
     {
-        try
+        try (final FileWriter writer = new FileWriter(filename))
         {
             final Gson gson;
-            final FileWriter writer;
-
             gson = new Gson();
-            writer = new FileWriter(filename);
 
             gson.toJson(questions, writer);
-
-            writer.close();
         }
         catch (final Exception e)
         {

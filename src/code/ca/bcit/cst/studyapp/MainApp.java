@@ -10,7 +10,7 @@ import javafx.stage.Stage;
  *
  * @author Nicholas Cayla
  * @author Samien Munwar
- * @version 1.0
+ * @version 1.2
  */
 public class MainApp
         extends Application

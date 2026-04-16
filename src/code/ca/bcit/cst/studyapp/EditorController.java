@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -24,41 +25,44 @@ import java.util.Optional;
  *
  * @author Nicholas Cayla
  * @author Samien Munwar
- * @version 1.0
+ * @version 1.2
  */
 public class EditorController
 {
-    public ComboBox<String> courseDropdown;
-    public TextField topicField;
-    public TextArea questionArea;
-    public TextArea solutionArea;
+    @FXML
+    private ComboBox<String> courseDropdown;
+    @FXML
+    private TextField topicField;
+    @FXML
+    private TextArea questionArea;
+    @FXML
+    private TextArea solutionArea;
+    @FXML
+    private TextField hintInputField;
 
     @FXML
-    public TextField hintInputField;
+    private ListView<String> hintListView;
 
-    public ListView<String> hintListView;
+    @FXML
+    private Button addHintButton;
+    @FXML
+    private Button removeHintButton;
+    @FXML
+    private Button saveButton;
+    @FXML
+    private Button deleteButton;
 
-    public Button addHintButton;
-    public Button removeHintButton;
-    public Button saveButton;
-    public Button deleteButton;
-
-    public ComboBox<Question> questionListView;
+    @FXML
+    private ComboBox<Question> questionListView;
 
     private ObservableList<String> hintList;
     private List<Question> questions;
-    private int selectedIndex = -1;
+    private int selectedIndex = RESET_QUESTION_INDEX;
 
     private static final String FILE = System.getProperty("user.dir") +
-                                        "/questions.json";
-
-    /*
-     * Private constructor to prevent instantiation.
-     */
-    private EditorController()
-    {
-
-    }
+            "/questions.json";
+    private static final int FIRST_QUESTION_INDEX = 0;
+    private static final int RESET_QUESTION_INDEX = -1;
 
     /**
      * Initializes the editor by loading existing questions,
@@ -76,57 +80,9 @@ public class EditorController
         hintList = FXCollections.observableArrayList();
         hintListView.setItems(hintList);
 
-        saveButton.setOnAction(e -> saveQuestion());
-
-        addHintButton.setOnAction(e -> addHint());
-
-        removeHintButton.setOnAction(e -> removeHint());
-
         questionListView.setItems(FXCollections.observableArrayList(questions));
         questionListView.
-                setCellFactory(lv ->
-                                       new ListCell<>() {
-                                            @Override
-                                            public void updateItem(final Question q,
-                                                                   final boolean empty)
-                                            {
-                                                super.updateItem(q, empty);
-                                                if (empty || q == null)
-                                                {
-                                                    setText(null);
-                                                }
-                                                else
-                                                {
-                                                    setText(q.getCourse() +
-                                                                    " - " +
-                                                                    q.getTopic());
-                                                }
-                                            }
-                                        });
-
-        questionListView.
-                getSelectionModel().
-                selectedIndexProperty().
-                addListener((obs,
-                             oldIndex,
-                             newIndex) ->
-                            {
-                                if (newIndex != null &&
-                                        newIndex.intValue() >= 0)
-                                {
-                                    selectedIndex = newIndex.intValue();
-                                    Question q = questions.get(selectedIndex);
-
-                                    courseDropdown.setValue(q.getCourse());
-                                    topicField.setText(q.getTopic());
-                                    questionArea.setText(q.getQuestionText());
-                                    solutionArea.setText(q.getSolution());
-
-                                    hintList.setAll(q.getHints());
-                                }
-                            });
-
-        deleteButton.setDisable(true);
+                setCellFactory(lv -> createQuestionCell());
 
         questionListView.
                 getSelectionModel().
@@ -135,8 +91,52 @@ public class EditorController
                              oldVal,
                              newVal) ->
                             {
-                                deleteButton.setDisable(newVal.intValue() < 0);
+                                final int index = newVal.intValue();
+                                deleteButton.setDisable(index < FIRST_QUESTION_INDEX);
+
+                                if (index >= FIRST_QUESTION_INDEX &&
+                                        index < questions.size())
+                                {
+                                    selectedIndex = index;
+                                    final Question q = questions.get(selectedIndex);
+                                    courseDropdown.setValue(q.getCourse());
+                                    topicField.setText(q.getTopic());
+                                    questionArea.setText(q.getQuestionText());
+                                    solutionArea.setText(q.getSolution());
+                                    hintList.setAll(q.getHints());
+                                }
                             });
+
+        deleteButton.setDisable(true);
+    }
+
+    /*
+     * Creates a custom ListCell for displaying questions in the question list view.
+     *
+     * @return a ListCell that formats each question as
+     * "Course - Topic" for display in the list view
+     */
+    private ListCell<Question> createQuestionCell()
+    {
+        return new ListCell<>()
+        {
+            @Override
+            protected void updateItem(final Question q,
+                                      final boolean empty)
+            {
+                super.updateItem(q, empty);
+                if (empty || q == null)
+                {
+                    setText(null);
+                }
+                else
+                {
+                    setText(q.getCourse() +
+                                    " - " +
+                                    q.getTopic());
+                }
+            }
+        };
     }
 
     /*
@@ -146,6 +146,7 @@ public class EditorController
      * After saving, it updates the question list view
      * and clears the input fields.
      */
+    @FXML
     private void saveQuestion()
     {
         final Question q;
@@ -157,7 +158,8 @@ public class EditorController
         q.setHints(new ArrayList<>(hintList));
         q.setSolution(solutionArea.getText());
 
-        if (selectedIndex >= 0)
+        if (selectedIndex >= FIRST_QUESTION_INDEX &&
+                selectedIndex < questions.size())
         {
             questions.set(selectedIndex, q);
         }
@@ -170,7 +172,7 @@ public class EditorController
 
         clearFields();
 
-        selectedIndex = -1;
+        selectedIndex = RESET_QUESTION_INDEX;
         questionListView.getSelectionModel().clearSelection();
         questionListView.setItems(FXCollections.observableArrayList(questions));
     }
@@ -180,7 +182,8 @@ public class EditorController
      */
     public void deleteQuestion()
     {
-        if (selectedIndex < 0)
+        if (selectedIndex < FIRST_QUESTION_INDEX ||
+                selectedIndex >= questions.size())
         {
             return;
         }
@@ -203,7 +206,7 @@ public class EditorController
             QuestionSaver.save(questions, FILE);
 
             clearFields();
-            selectedIndex = -1;
+            selectedIndex = RESET_QUESTION_INDEX;
 
             questionListView.
                     setItems(FXCollections.
@@ -247,18 +250,26 @@ public class EditorController
     {
         final int selectedIndex;
         selectedIndex = hintListView.
-                        getSelectionModel().
-                        getSelectedIndex();
+                getSelectionModel().
+                getSelectedIndex();
 
-        if (selectedIndex >= 0)
+        if (selectedIndex >= FIRST_QUESTION_INDEX &&
+                selectedIndex < hintList.size())
         {
             hintList.remove(selectedIndex);
         }
     }
 
+    /**
+     * Switches to the study interface by loading the study FXML layout
+     * and setting it as the current scene.
+     *
+     * @throws Exception if there is an error loading the
+     *                   FXML file or setting up the scene
+     */
     @FXML
     public void switchToStudy()
-        throws Exception
+            throws Exception
     {
         final FXMLLoader loader;
         final Scene scene;
@@ -269,8 +280,8 @@ public class EditorController
 
         scene.
                 getStylesheets().
-                add(getClass().
-                            getResource("/style.css").
+                add(Objects.requireNonNull(getClass().
+                                                   getResource("/style.css")).
                             toExternalForm());
 
         stage = (Stage) saveButton.getScene().getWindow();

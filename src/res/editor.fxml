@@ -7,27 +7,46 @@
 <?import javafx.geometry.Insets?>
 <VBox spacing="15" xmlns:fx="http://javafx.com/fxml" fx:controller="ca.bcit.cst.studyapp.EditorController">
     <padding>
-        <Insets top="10" right="15" bottom="10" left="15"/>
+        <Insets top="10"
+                right="15"
+                bottom="10"
+                left="15"/>
     </padding>
 
-    <ComboBox fx:id="questionListView" prefWidth="250"/>
+    <ComboBox fx:id="questionListView"
+              prefWidth="250"/>
 
-    <ComboBox fx:id="courseDropdown" promptText="Course"/>
+    <ComboBox fx:id="courseDropdown"
+              promptText="Course"/>
 
-    <TextField fx:id="topicField" promptText="Topic"/>
+    <TextField fx:id="topicField"
+               promptText="Topic"/>
 
-    <TextArea fx:id="questionArea" promptText="ca.bcit.cst.studyapp.Question"/>
+    <TextArea fx:id="questionArea"
+              promptText="ca.bcit.cst.studyapp.Question"/>
 
-    <TextField fx:id="hintInputField" promptText="Enter hint"/>
-    <Button fx:id="addHintButton" text="Add Hint"/>
+    <TextField fx:id="hintInputField"
+               promptText="Enter hint"/>
+    <Button fx:id="addHintButton"
+            text="Add Hint"
+            onAction="#addHint"/>
 
-    <ListView fx:id="hintListView" prefHeight="100"/>
-    <Button fx:id="removeHintButton" text="Remove Hint"/>
+    <ListView fx:id="hintListView"
+              prefHeight="100"/>
+    <Button fx:id="removeHintButton"
+            text="Remove Hint"
+            onAction="#removeHint"/>
 
-    <TextArea fx:id="solutionArea" promptText="Solution"/>
+    <TextArea fx:id="solutionArea"
+              promptText="Solution"/>
 
-    <Button fx:id="saveButton" text="Save ca.bcit.cst.studyapp.Question"/>
-    <Button fx:id="deleteButton" text="Delete Question" onAction="#deleteQuestion"/>
+    <Button fx:id="saveButton"
+            text="Save ca.bcit.cst.studyapp.Question"
+            onAction="#saveQuestion"/>
+    <Button fx:id="deleteButton"
+            text="Delete Question"
+            onAction="#deleteQuestion"/>
 
-    <Button text="Study Mode" onAction="#switchToStudy"/>
+    <Button text="Study Mode"
+            onAction="#switchToStudy"/>
 </VBox>

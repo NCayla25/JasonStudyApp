@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Nicholas Cayla
  * @author Samien Munwar
- * @version 1.0
+ * @version 1.2
  */
 public class Question
 {

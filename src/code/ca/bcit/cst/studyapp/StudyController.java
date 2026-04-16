@@ -18,20 +18,22 @@ import java.util.Random;
  *
  * @author Nicholas Cayla
  * @author Samien Munwar
- * @version 1.0
+ * @version 1.2
  */
 public class StudyController
 {
-    public Label questionLabel;
-    public Label hintLabel;
-    public TextArea solutionArea;
+    @FXML private Label questionLabel;
+    @FXML private Label hintLabel;
+    @FXML private TextArea solutionArea;
 
     private List<Question> questions;
     private Question currentQuestion;
     public ComboBox<String> courseFilterDropdown;
     private int hintIndex;
 
-    private final String FILE = System.getProperty("user.dir") + "/questions.json";
+    private final String FILE = System.getProperty("user.dir") +
+                                "/questions.json";
+    private static final int FIRST_QUESTION_INDEX = 0;
 
     /**
      * Initializes the study interface by loading questions
@@ -92,7 +94,7 @@ public class StudyController
         hintLabel.setText("");
         solutionArea.setText("");
 
-        hintIndex = 0;
+        hintIndex = FIRST_QUESTION_INDEX;
     }
 
     /**
