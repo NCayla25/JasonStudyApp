@@ -5,7 +5,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
-<VBox spacing="15" xmlns:fx="http://javafx.com/fxml" fx:controller="EditorController">
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml" fx:controller="ca.bcit.cst.studyapp.EditorController">
     <padding>
         <Insets top="10" right="15" bottom="10" left="15"/>
     </padding>
@@ -16,7 +16,7 @@
 
     <TextField fx:id="topicField" promptText="Topic"/>
 
-    <TextArea fx:id="questionArea" promptText="Question"/>
+    <TextArea fx:id="questionArea" promptText="ca.bcit.cst.studyapp.Question"/>
 
     <TextField fx:id="hintInputField" promptText="Enter hint"/>
     <Button fx:id="addHintButton" text="Add Hint"/>
@@ -26,7 +26,7 @@
 
     <TextArea fx:id="solutionArea" promptText="Solution"/>
 
-    <Button fx:id="saveButton" text="Save Question"/>
+    <Button fx:id="saveButton" text="Save ca.bcit.cst.studyapp.Question"/>
     <Button fx:id="deleteButton" text="Delete Question" onAction="#deleteQuestion"/>
 
     <Button text="Study Mode" onAction="#switchToStudy"/>

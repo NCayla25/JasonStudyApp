@@ -4,7 +4,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
-<VBox spacing="15" xmlns:fx="http://javafx.com/fxml" fx:controller="StudyController">
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml" fx:controller="ca.bcit.cst.studyapp.StudyController">
     <padding>
         <Insets top="10" right="15" bottom="10" left="15"/>
     </padding>
@@ -19,7 +19,7 @@
     <Button text="Show Solution" onAction="#showSolution"/>
     <TextArea fx:id="solutionArea" editable="false"/>
 
-    <Button text="Next Question" onAction="#nextQuestion"/>
+    <Button text="Next ca.bcit.cst.studyapp.Question" onAction="#nextQuestion"/>
 
     <Button text="Editor Mode" onAction="#switchToEditor"/>
 </VBox>
