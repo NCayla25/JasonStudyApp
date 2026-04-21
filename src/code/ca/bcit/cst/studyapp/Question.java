@@ -14,11 +14,33 @@ import java.util.List;
  */
 public class Question
 {
-    private String course;
-    private String topic;
-    private String questionText;
-    private List<String> hints;
-    private String solution;
+    private final String course;
+    private final String topic;
+    private final String questionText;
+    private final List<String> hints;
+    private final String solution;
+
+    /**
+     * Constructor for the Question.
+     *
+     * @param course the course name as a String
+     * @param topic the topic of the course as a String
+     * @param questionText the question text as a String
+     * @param hints the list of hints for each question
+     * @param solution the solution of the question as a String
+     */
+    public Question(final String course,
+                    final String topic,
+                    final String questionText,
+                    final List<String> hints,
+                    final String solution)
+    {
+        this.course = course;
+        this.topic = topic;
+        this.questionText = questionText;
+        this.hints = hints;
+        this.solution = solution;
+    }
 
     /**
      * Getter for course
@@ -68,55 +90,5 @@ public class Question
     public String getSolution()
     {
         return solution;
-    }
-
-    /**
-     * Setter for course
-     *
-     * @param course the course to set for this question
-     */
-    public void setCourse(final String course)
-    {
-        this.course = course;
-    }
-
-    /**
-     * Setter for topic
-     *
-     * @param topic the topic to set for this question
-     */
-    public void setTopic(final String topic)
-    {
-        this.topic = topic;
-    }
-
-    /**
-     * Setter for question text
-     *
-     * @param questionText the text of the question to set
-     */
-    public void setQuestionText(final String questionText)
-    {
-        this.questionText = questionText;
-    }
-
-    /**
-     * Setter for hints
-     *
-     * @param hints a list of hints to set for this question
-     */
-    public void setHints(final List<String> hints)
-    {
-        this.hints = hints;
-    }
-
-    /**
-     * Setter for solution
-     *
-     * @param solution the solution to set for this question
-     */
-    public void setSolution(final String solution)
-    {
-        this.solution = solution;
     }
 }

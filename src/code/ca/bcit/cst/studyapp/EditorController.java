@@ -150,13 +150,11 @@ public class EditorController
     private void saveQuestion()
     {
         final Question q;
-        q = new Question();
-
-        q.setCourse(courseDropdown.getValue());
-        q.setTopic(topicField.getText());
-        q.setQuestionText(questionArea.getText());
-        q.setHints(new ArrayList<>(hintList));
-        q.setSolution(solutionArea.getText());
+        q = new Question(courseDropdown.getValue(),
+                topicField.getText(),
+                questionArea.getText(),
+                new ArrayList<>(hintList),
+                solutionArea.getText());
 
         if (selectedIndex >= FIRST_QUESTION_INDEX &&
                 selectedIndex < questions.size())
